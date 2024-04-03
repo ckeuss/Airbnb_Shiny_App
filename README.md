@@ -15,7 +15,13 @@ The datasets used for this analysis are listings.csv and listings.csv.gz from th
 
 ### Tools
 - R for data inspection and formatting
-- shiny package for interactive app 
+- shiny package for interactive app
+
+### Access to the app
+```
+library(shiny)
+runGitHub(repo = "Airbnb_Shiny_App", username = "ckeuss", ref = "main")
+```
 
 
 ### Data Analysis
