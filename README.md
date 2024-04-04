@@ -1,5 +1,5 @@
 # Airbnb Data viz and manipulation
-## R Shiny-App - learning to build an app with R
+## R Shiny-App
 
 ### Project Overview
 This interactive data viz and exploratory analysis project aims to provide insight into the price ranges and number of airbnb accommodation listings depending on various factors such as neighbourhood, type of accommodation, number of beds etc. The chart of choice is the boxplot to show the range as well as the median. It gives potential Airbnb accommodation providers an understanding of the market in Berlin for the year 2023.
@@ -56,4 +56,9 @@ filtered_data <- reactive(
       theme_minimal()
   })
 ```
+
+### Insights on airbnb listings in Berlin in 2023
+- Looking at the licensed superhosts with accommodations available 201-365 days a year, no price restrictions and having 2 beds it becomes clear that the most accommodations that fit that criteria are in Mitte (62), followed by Friedrichshain-Kreuzberg (45) and Pankow (38). The median price for entire apartments lie at around 240 Euro for Mitte, 140 Euro for Friedrichshain-Kreuszberg and also around 140 Euro for Pankow. However, it should be mentioned that there are several serviced apartments in Mitte that might have a higher price due to the additional service.
+- Further, most superhosts in these three neighbourhoods with the availability of 201-365 days a year and no price restriction offered an entire apartment instead of e.g. a hotel room or private room. The most listings in Freidrichshain-Kreuzberg and Pankow offer 2 beds, in Mitte the most superhost listings have 1 bed (80) and accommodate 2 people.
+- Based on the given data there were 128 airbnb superhost listings in total that offered accommodation with more than 4 beds, with all kinds of availabilities throughout the year, again with the most being in Mitte.
 
