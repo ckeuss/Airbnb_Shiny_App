@@ -9,6 +9,8 @@ The analysis can answer key questions such as:
 - What are the price ranges in the neighbourhoods depending on e.g. the type of accommodation or number of beds?
 - What do listings of super hosts have in common?
 
+![App Preview](App_preview.png)
+
 ### Data Sources
 The datasets used for this analysis are listings.csv and listings.csv.gz from the website insideairbnb.com/get-the-data.  
 [download here](http://insideairbnb.com/get-the-data/)
@@ -22,7 +24,6 @@ The datasets used for this analysis are listings.csv and listings.csv.gz from th
 library(shiny)
 runGitHub(repo = "Airbnb_Shiny_App", username = "ckeuss", ref = "main")
 ```
-
 
 ### Data Analysis
 Some interesting code worked with:
@@ -61,4 +62,5 @@ filtered_data <- reactive(
 - Looking at the licensed superhosts with accommodations available 201-365 days a year, no price restrictions and having 2 beds it becomes clear that the most accommodations that fit that criteria are in Mitte (62), followed by Friedrichshain-Kreuzberg (45) and Pankow (38). The median price for entire apartments lie at around 240 Euro for Mitte, 140 Euro for Friedrichshain-Kreuzberg and also around 140 Euro for Pankow. However, it should be mentioned that there are several serviced apartments in Mitte that might have a higher price due to the additional service.
 - Further, most superhosts in these three neighbourhoods with the availability of 201-365 days a year and no price restriction offered an entire apartment instead of e.g. a hotel room or private room. The most listings in Friedrichshain-Kreuzberg and Pankow offer 2 beds, in Mitte the most superhost listings have 1 bed (80) and accommodate 2 people.
 - Based on the given data there were 128 airbnb superhost listings in total that offered accommodation with more than 4 beds, with all kinds of availabilities throughout the year, again with the most being in Mitte.
+
 
