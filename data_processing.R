@@ -13,53 +13,74 @@ library(tidyverse)
 
 airbnb <- read_csv("data/airbnb_listings.csv")
 
-airbnb_complete <- read_csv("data/listings.csv")
+airbnb_detailed <- read_csv("data/listings.csv")
 
-#no missing values
+# no missing values
 
-any(is.na("airbnb_listings.csv"))
-any(is.na("listings.csv"))
+any(is.na(airbnb))
+any(is.na(airbnb_detailed))
 
 #adding interesting values from the detailed listing to the dataset "airbnb"
-beds <- airbnb_complete$beds
+
+# no of beds
+no_beds <- airbnb_detailed$beds
+no_beds = as.integer(no_beds)
 
 airbnb <- airbnb %>%
-   mutate(beds = beds)
+  mutate(no_beds = no_beds)
 
-accommodates <- airbnb_complete$accommodates
-
-airbnb <- airbnb %>%
-  mutate(accommodates = accommodates)
-
-host_is_superhost <- airbnb_complete$host_is_superhost
+# no of persons
+no_persons <- airbnb_detailed$accommodates
 
 airbnb <- airbnb %>%
-   mutate(host_is_superhost  = host_is_superhost)
+  mutate(no_persons = as.integer(no_persons))
 
-airbnb<- airbnb %>%
-   mutate(beds = case_when(
-     beds == 1 ~ "1",
-     beds == 2 ~ "2",
-     beds == 3 ~ "3",
-     beds == 4 ~ "4",
+# no of host listings
+host_listings_count <- airbnb_detailed$host_listings_count
 
-     TRUE ~ "other"
-   ))
+airbnb <- airbnb %>%
+  mutate(host_listings_count = as.integer(host_listings_count))
 
-airbnb$beds <- as.character(airbnb$beds)
+# no of reviews
+number_of_reviews <- airbnb_detailed$number_of_reviews
 
-str(airbnb)
+airbnb <- airbnb %>%
+  mutate(number_of_reviews = as.integer(number_of_reviews))
 
-###availability_365 divided in ranges
+# superhost
+super_host <- airbnb_detailed$host_is_superhost
+
+airbnb <- airbnb %>%
+  mutate(super_host = super_host)
+
+#availability_365
+airbnb <- airbnb %>%
+  mutate(availability_365 = as.integer(availability_365))
 
 availability_ranges <- c("0-30", "31-60", "61-90", "91-120", "121-200", "201-365" )
 
 airbnb$availability_range <- cut(airbnb$availability_365,
-                                  breaks = c(0, 30, 60, 90, 120, 200, 365),
-                                  labels = availability_ranges,
-                                  right = FALSE)
+                                 breaks = c(0, 30, 60, 90, 120, 200, 365),
+                                 labels = availability_ranges,
+                                 right = FALSE)
+# no of beds groups
+airbnb<- airbnb %>%
+  mutate(no_beds = case_when(
+    no_beds == 1 ~ "1",
+    no_beds == 2 ~ "2",
+    no_beds == 3 ~ "3",
+    no_beds == 4 ~ "4",
+    
+    TRUE ~ "other"
+  ))
 
 
+airbnb$no_beds <- as.character(airbnb$no_beds)
+
+
+
+str(airbnb)
 
 #create new csv.-file
 write.csv(airbnb, "airbnb_data_2023.csv", row.names = FALSE)
+
