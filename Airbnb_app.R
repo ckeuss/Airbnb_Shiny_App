@@ -12,12 +12,80 @@ library(data.table)
 library(dplyr)
 
 #---------------------------------------------------------------------------#
-# loading pre-processed data based on airbnb_listings.csv and listings.csv
+# data loading, inspection and formatting
 #---------------------------------------------------------------------------#
 
-airbnb <- read_csv("airbnb_data_2023.csv")
+airbnb <- read_csv("data/airbnb_listings.csv")
+
+airbnb_detailed <- read_csv("data/listings.csv")
+
+# no missing values
+
+any(is.na("airbnb_listings.csv"))
+any(is.na("listings.csv"))
+
+#adding interesting values from the detailed listing to the dataset "airbnb"
+
+# no of beds
+no_beds <- airbnb_detailed$beds
+no_beds = as.integer(no_beds)
+
+airbnb <- airbnb %>%
+  mutate(no_beds = no_beds)
+
+# no of persons
+no_persons <- airbnb_detailed$accommodates
+
+airbnb <- airbnb %>%
+  mutate(no_persons = as.integer(no_persons))
+
+# no of host listings
+host_listings_count <- airbnb_detailed$host_listings_count
+
+airbnb <- airbnb %>%
+  mutate(host_listings_count = as.integer(host_listings_count))
+
+# no of reviews
+number_of_reviews <- airbnb_detailed$number_of_reviews
+
+airbnb <- airbnb %>%
+  mutate(number_of_reviews = as.integer(number_of_reviews))
+
+# superhost
+super_host <- airbnb_detailed$host_is_superhost
+
+airbnb <- airbnb %>%
+  mutate(super_host = super_host)
+
+#availability_365
+airbnb <- airbnb %>%
+  mutate(availability_365 = as.integer(availability_365))
+
+# no of beds groups
+airbnb<- airbnb %>%
+  mutate(no_beds = case_when(
+    no_beds == 1 ~ "1",
+    no_beds == 2 ~ "2",
+    no_beds == 3 ~ "3",
+    no_beds == 4 ~ "4",
+    
+    TRUE ~ "other"
+  ))
+
+
+airbnb$no_beds <- as.character(airbnb$no_beds)
+
+str(airbnb)
+
+# availability_365 divided in ranges
 
 availability_ranges <- c("0-30", "31-60", "61-90", "91-120", "121-200", "201-365" )
+
+airbnb$availability_range <- cut(airbnb$availability_365,
+                                 breaks = c(0, 30, 60, 90, 120, 200, 365),
+                                 labels = availability_ranges,
+                                 right = FALSE)
+
 
 #---------------------------------------------------------------------------#
 # UI
@@ -37,8 +105,10 @@ availability_ranges <- c("0-30", "31-60", "61-90", "91-120", "121-200", "201-365
 
 
 ui <- fluidPage(
+  #Theme
+  theme = shinytheme("simplex"),
   # Title
-  titlePanel("Airbnb Data Viz and Manipulation"),
+  titlePanel("Airbnb Data"),
   
   # Sidebarlayout
   
@@ -46,7 +116,7 @@ ui <- fluidPage(
     sidebarPanel(
       # SelectInput
       selectInput("neighbourhood_group",
-                  "Kiez/Neighbourhood", # title
+                  "District", # title
                   choices = unique(airbnb$neighbourhood_group),
                   selected = "Pankow"), # pre-selection
       
@@ -78,7 +148,7 @@ ui <- fluidPage(
       
       
       # Radiobutton
-      radioButtons("beds",
+      radioButtons("no_beds",
                    "Number of beds:",
                    choices = list("1 bed"= "1", "2 beds"= "2", "3 beds"= "3",
                                   "4 beds" = "4", "> 4 beds" = "other"),
@@ -86,7 +156,7 @@ ui <- fluidPage(
       
       
       # Checkbox
-      checkboxGroupInput("host_is_superhost",
+      checkboxGroupInput("super_host",
                          "Superhost:",
                          choices = list("Yes" = "TRUE",
                                         "No" = "FALSE"),
@@ -100,6 +170,9 @@ ui <- fluidPage(
       # Download buttons
       downloadButton("downloadData", "Download Filtered Data"),
       downloadButton("downloadPlot", "Download Box Plot"),
+      
+      # add space
+      br(" "),
       
       # Display number of listings
       textOutput("listingCount"),
@@ -132,16 +205,16 @@ filtered_data <- reactive(
     filter(if (input$license == "NA")is.na(license) else !is.na(license)) %>%
     filter(price >= input$price[1] & price <= input$price[2]) %>%
     filter(availability_range %in% input$availability_365) %>%
-    filter(beds == input$beds) %>%
-    filter(host_is_superhost %in% input$host_is_superhost)
+    filter(no_beds == input$no_beds) %>%
+    filter(super_host %in% input$super_host)%>%
+    select(id, name, host_id, host_name, neighbourhood_group, room_type,price, number_of_reviews, reviews_per_month, host_listings_count, availability_365, no_beds, no_persons, super_host)
   )
   
   # Number of listings
-output$listingCount <- renderText({
+  output$listingCount <- renderText({
   paste("Number of Listings:", nrow(filtered_data())) 
-})
+  })
 
- 
  
 # Boxplot  
  output$Boxplot <- renderPlot({
@@ -153,9 +226,14 @@ output$listingCount <- renderText({
   })
   
   # Table
-  output$Table <- renderTable({
-    filtered_data()
-  })
+ output$Table <- renderTable({
+
+   data <- filtered_data()
+   # Rename columns
+   colnames(data) <- c("Id", "Name", "Host Id", "Host Name", "District", "Room Type", "Price (Euro)", "No. of Reviews", "Reviews per Month", "No. of Host listings","Availability (days/year)", "No. of Beds", "No. of Persons", "Superhost")
+   
+   data
+ })
   
   # Download-Button
   output$downloadData <- downloadHandler(
