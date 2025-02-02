@@ -9,8 +9,6 @@ The analysis can answer key questions such as:
 - What are the price ranges in the neighbourhoods depending on e.g. the type of accommodation or number of beds?
 - What do listings of super hosts have in common?
 
-![App Preview](App_preview.png)
-
 ### Data Sources
 The datasets used for this analysis are listings.csv and listings.csv.gz from the website insideairbnb.com/get-the-data.  
 [download here](http://insideairbnb.com/get-the-data/)
@@ -20,10 +18,8 @@ The datasets used for this analysis are listings.csv and listings.csv.gz from th
 - shiny package for interactive app
 
 ### Access to the app
-```
-library(shiny)
-runGitHub(repo = "Airbnb_Shiny_App", username = "ckeuss", ref = "main")
-```
+
+https://ckeuss.shinyapps.io/Airbnb_Shiny_App/
 
 ### Data Analysis
 Some interesting code worked with:
@@ -63,4 +59,6 @@ filtered_data <- reactive(
 - Further, most superhosts in these three neighbourhoods with the availability of 201-365 days a year and no price restriction offered an entire apartment instead of e.g. a hotel room or private room. The most listings in Friedrichshain-Kreuzberg and Pankow offer 2 beds, in Mitte the most superhost listings have 1 bed (80) and accommodate 2 people.
 - Based on the given data there were 128 airbnb superhost listings in total that offered accommodation with more than 4 beds, with all kinds of availabilities throughout the year, again with the most being in Mitte.
 
+### Feedback 
+If you encounter any issues, mistakes, or have suggestions for improvement, please let me know.
 
