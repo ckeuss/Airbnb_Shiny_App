@@ -27,7 +27,8 @@ airbnb <- airbnb %>%
   mutate(
     no_persons = as.integer(no_persons),  
     number_of_reviews = as.integer(number_of_reviews),
-    host_listings_count = as.integer(host_listings_count)
+    host_listings_count = as.integer(host_listings_count),
+    availability_365 = as.integer(availability_365)
   )
 
 #---------------------------------------------------------------------------#
